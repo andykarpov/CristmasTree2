@@ -1,0 +1,96 @@
+
+/**
+* Christmas tree lights
+*
+*/
+
+// pre-defined led states
+#define LED1L B00010000
+#define LED1R B00001000
+#define LED2L B00100000
+#define LED2R B00000100
+#define LED3L B01000000
+#define LED3R B00000010
+#define LED4L B10000000
+#define LED4R B00000001
+
+#define ROW0 B00000000
+#define ROW1 LED1L + LED1R
+#define ROW2 LED2L + LED2R
+#define ROW3 LED3L + LED3R
+#define ROW4 LED4L + LED4R
+#define ROWALL ROW1 + ROW2 + ROW3 + ROW4
+
+#define COLL LED1L + LED2L + LED3L + LED4L
+#define COLR LED1R + LED2R + LED3R + LED4R
+
+// lights program
+const byte lights[106] = {
+  // running light
+  LED4L, LED3L, LED2L, LED1L, // 4
+  LED1R, LED2R, LED3R, LED4R, // 4
+  
+  // running light backward
+  ROW0, LED4R, LED3R, LED2R, LED1R, // 5
+  LED1L, LED2L, LED3L, LED4L, ROW0, // 5
+  
+  // cosmic
+  ROW4, ROW4+ROW3, ROW4+ROW3+ROW2, ROW4+ROW3+ROW2+ROW1, //4
+  ROW3+ROW2+ROW1, ROW2+ROW1, ROW1, ROW0, //4 
+  
+  // raising row
+  ROW4, ROW3, ROW2, ROW1, // 4
+  ROW4, ROW3, ROW2, ROW1, // 4
+
+  // cosmic
+  ROW4, ROW4+ROW3, ROW4+ROW3+ROW2, ROW4+ROW3+ROW2+ROW1, //4
+  ROW3+ROW2+ROW1, ROW2+ROW1, ROW1, ROW0, //4 
+  
+  // swapping lights
+  LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L,LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L, //4 
+  LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L,LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L, //4 
+
+  // cosmic
+  ROW4, ROW4+ROW3, ROW4+ROW3+ROW2, ROW4+ROW3+ROW2+ROW1, //4
+  ROW3+ROW2+ROW1, ROW2+ROW1, ROW1, ROW0, //4 
+
+  // swapping columns
+  COLL, COLR, COLL, COLR, // 4
+  COLL, COLR, COLL, COLR, // 4
+
+  // cosmic
+  ROW4, ROW4+ROW3, ROW4+ROW3+ROW2, ROW4+ROW3+ROW2+ROW1, //4
+  ROW3+ROW2+ROW1, ROW2+ROW1, ROW1, ROW0, //4 
+  
+  // blinking all
+  ROWALL, ROW0, ROWALL, ROW0, // 4
+  ROWALL, ROW0, ROWALL, ROW0, // 4
+  
+  // cosmic
+  ROW4, ROW4+ROW3, ROW4+ROW3+ROW2, ROW4+ROW3+ROW2+ROW1, //4
+  ROW3+ROW2+ROW1, ROW2+ROW1, ROW1, ROW0, //4 
+
+  // swapping lights
+  LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L,LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L, //4 
+  LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L,LED1L+LED3L+LED2R+LED4R,LED1R+LED3R+LED2L+LED4L, //4 
+  
+  // cosmic
+  ROW4, ROW4+ROW3, ROW4+ROW3+ROW2, ROW4+ROW3+ROW2+ROW1, //4
+  ROW3+ROW2+ROW1, ROW2+ROW1, ROW1, ROW0, //4   
+}; 
+
+int i = 0;
+int count = 106;
+
+void setup() {
+  DDRD = B11111111;
+}
+
+void loop() {
+    PORTD = lights[i];
+    i++;
+    if (i > count) {
+      i=0;
+    }
+    delay(120);
+}
